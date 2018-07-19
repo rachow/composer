@@ -1,0 +1,4 @@
+# You can install Laravel to the required environment from here
+
+# RUN COMMAND (HERE):
+# php composer.phar create-project --prefer-dist laravel/laravel /c/wamp64/www/DIRECTORY
