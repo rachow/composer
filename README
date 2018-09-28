@@ -1,4 +1,15 @@
-# You can install Laravel to the required environment from here
+# The Installer
 
-# RUN COMMAND (HERE):
-# php composer.phar create-project --prefer-dist laravel/laravel /c/wamp64/www/DIRECTORY
+# Installer project is a tiny project with a bunch of objects that remove tedious tasks that a modern
+# developer has to deal with.
+
+# Now a days the modern developer has to maintain and install many packages and yet this can be time 
+# consuming since you have to understand the commands and rules of installation for each of the package
+
+# What we have here is a simple step installer, which will literally install any package that is supported
+# feel free to use and modify and re-distribute as necessary to fit your needs!
+#
+
+# Enjoy!
+#
+
