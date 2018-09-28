@@ -10,6 +10,10 @@
 # feel free to use and modify and re-distribute as necessary to fit your needs!
 #
 
+# Usage: drop files into the correct directory then run the following script
+# php install.php --help
+
+
 # Enjoy!
 #
 
