@@ -28,7 +28,7 @@ class Cli
 		$cli_intro = "\t\tPlease wait a few seconds ...\r\n\r\n";
 		echo $cli_intro;
 		flush();
-		sleep(5);
+		sleep(1);
 	}
 
 	public function show_message( $msg, $exit_mode = false )

@@ -32,6 +32,16 @@ class Installer extends Cli
 		return in_array( $package, $this->installables );
 	}
 
+	public function show_packages_installable()
+	{
+		$package_msg = "Below are the help options to choose from\r\n\r\n";
+		foreach( $this->installables as $id => $package )
+		{
+			$package_msg .= '--' . $package . "\t" . 'will install this package' . "\r\n";
+		}
+		$this->show_message($package_msg);
+	}
+
 	public function install_package( $package )
 	{
 		if( !$this->installable_package( $package ) )
@@ -45,9 +55,29 @@ class Installer extends Cli
 	{
 		if( empty( $this->install ) )
 		{
-			$this->show_message('ERROR: Nothing to install type --help for more info!');
+			$this->show_message('ERROR: Nothing to install type --help for more info!', true);
 		}
-				
+
+		foreach( $this->install as $key => $pckg )
+		{
+			$this->show_message('Ready to install ' . $pckg );
+
+			switch( $pckg )
+			{
+				case 'composer':
+					/* install composer */
+					break;
+				case 'laravel':
+					/* install laravel check dependencies */
+					break;
+				case 'symfony':
+					/* install symfony */
+					break;
+				case 'yii':
+					/* install YII */
+					break;
+			}
+		}
 	}
 }
 

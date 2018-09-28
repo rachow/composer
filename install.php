@@ -27,11 +27,19 @@ foreach( $commands as $idx => $opt )
 }
 
 $installer = new Installer();
+
+if( $show_help == true )
+{
+	$installer->show_packages_installable();
+	exit;
+}
+
+
 $cnt_packages = count($options);
 
 if( $cnt_packages > 0 )
 {
-	for($j=0; $j <= $cnt_packages; $j++)
+	for($j=0; $j < $cnt_packages; $j++)
 	{
 		$installer->install_package($options[$j]);
 	}
