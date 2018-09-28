@@ -71,7 +71,7 @@ if( $command == '--clean' )
     echo "\r\n--clean = cleans unwanted files\r\n";
     echo "\r\n--reinstall = re-installs the composer even if it exists\r\n";
     echo "\r\n--hide = hides the installer file to hidden\r\n";
-    echo "\r\n--laravel = installs composer then installs laravel in current directory\r\n";
+    echo "\r\n--laravel = installs composer then installs laravel in current directory but remember if you need to install it in current directory then supply a '.' dot as second argument\r\n";
     exit;
     
 }elseif( $command == '--hide' )
