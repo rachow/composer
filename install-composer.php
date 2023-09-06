@@ -10,30 +10,26 @@
 *       -reinstall
 *       -hide
 */
+error_reporting(E_ALL ^ E_NOTICE);
+ini_set('display_errors' , 'off');
 
-error_reporting( E_ALL ^ E_NOTICE );
-ini_set( 'display_errors' , 'off' );
-
-$cwd = dirname( __FILE__ );
+$cwd = dirname(__FILE__);
 $pid = getmypid();
 $fuid = md5(time());
 
-chdir( $cwd ); /* change to the current directory! */
+chdir($cwd); // change the current running dir
 
-/* fetch the user argument if any! */
+// fetch the user argument if any
 $command = @$argv[1];
 $command_second = @$argv[2];
-//extra options
+// extra options
 
-//for installing laravel
+// for installing laravel
 $install_laravel = false;
 
-if( php_sapi_name() !== "cli")
-{
+if (php_sapi_name() !== "cli") {
    die("Direct access not allowed");
 }
-
-
 
 /*
 ***************************************************************************************
@@ -41,9 +37,8 @@ if( php_sapi_name() !== "cli")
 ***************************************************************************************
 */
 
-if( $command == '--clean' )
-{
-    //cleaning in process!
+if ($command == '--clean') {
+    // cleaning in process!
     echo "\r\n$pid: Cleaning now ....\r\n";
     flush();
     unlink( dirname( __FILE__ ) . '/sha-signature-check.dat' );
@@ -54,45 +49,34 @@ if( $command == '--clean' )
     echo "\r\nDone - clean complete\r\n";
     exit;
 
-}elseif( $command == '--reinstall' )
-{
+} else if ($command == '--reinstall') {
     unlink( dirname( __FILE__ ) . '/composer.phar' );
-    //continue as normal install now..
-
-    if( file_exists( dirname( __FILE__ ) . '/composer.json' ) || file_exists( dirname( __FILE__ ) . '/composer.lock' ) )
-    {
+    // continue as normal install now..
+    if (file_exists( dirname( __FILE__ ) . '/composer.json' ) || file_exists( dirname( __FILE__ ) . '/composer.lock' )) {
         echo "\r\n$pid: WARNING - files 'composer.json' and/or 'composer.lock' exist, you must remove these from here before re-installing!\r\n";
         exit;
     }
-
-}elseif( $command == '--help' )
-{
+} else if ($command == '--help') {
     echo "\r\n--help = shows help\r\n";
     echo "\r\n--clean = cleans unwanted files\r\n";
     echo "\r\n--reinstall = re-installs the composer even if it exists\r\n";
     echo "\r\n--hide = hides the installer file to hidden\r\n";
     echo "\r\n--laravel = installs composer then installs laravel in current directory but remember if you need to install it in current directory then supply a '.' dot as second argument\r\n";
     exit;
-    
-}elseif( $command == '--hide' )
-{
+} else if ($command == '--hide') {
     echo "\r\nHiding myself to .install-composer.php\r\n";
     echo "\r\nDone\r\n";
     flush();
     rename( dirname( __FILE__ ) . '/install-composer.php' , dirname( __FILE__ ) . '/.install-composer.php' );
     exit;
-}elseif( $command == '--delete' )
-{
+} else if ($command == '--delete') {
 	echo "\r\nDeleting the installation file: " . __FILE__  . "\r\n";
 	echo "\r\nDone\r\n";
 	unlink( __FILE__ );
 	exit;
-}elseif( $command == '--laravel' )
-{
+} else if ($command == '--laravel') {
     $install_laravel = true;
-}
-elseif( isset( $command ) && !empty( $command ) )
-{
+} else if (isset( $command ) && !empty( $command )) {
     echo "\r\nCommand not recognized enter --help for manual\r\n";
     flush();
     exit;
@@ -104,37 +88,26 @@ elseif( isset( $command ) && !empty( $command ) )
 ***************************************************************************************
 */
 
-if( file_exists( dirname( __FILE__ ) . '/composer.phar' ) )
-{
+if (file_exists( dirname( __FILE__ ) . '/composer.phar' )) {
     exit( "\r\n$pid: Composer Already Installed - composer.phar exists!\r\n" );
 }
-
-if( file_exists( dirname( __FILE__ ) . '/sha-signature-check.dat' ) )
-{
+if (file_exists( dirname( __FILE__ ) . '/sha-signature-check.dat' )) {
     echo "\r\n$pid: Removing the existing sha-signature-check.dat file!\r\n";
     flush(); //flush it to the user!
 }
-
-if( !file_exists( dirname( __FILE__) . '/composer-setup-' . $fuid . '.php' ) )
-{
-    if( !copy( 'https://getcomposer.org/installer', dirname( __FILE__ ) . '/composer-setup-' . $fuid . '.php' ) )
-    {
+if (!file_exists( dirname( __FILE__) . '/composer-setup-' . $fuid . '.php' )) {
+    if (!copy( 'https://getcomposer.org/installer', dirname( __FILE__ ) . '/composer-setup-' . $fuid . '.php' )) {
         exit( "\r\n$pid: Could not install Composer\r\n" );
     }
 }
-
-if( !file_exists( dirname( __FILE__ ) . '/composer-setup-' . $fuid . '.php' ) )
-{
+if (!file_exists( dirname( __FILE__ ) . '/composer-setup-' . $fuid . '.php' )) {
     exit( "\r\n$pid: Could not install Composer file - composer-setup-$fuid.php does not exist\r\n" );
 }
-
-//retrieve the sha!
-if( !copy( 'https://composer.github.io/installer.sig', dirname( __FILE__ ) . '/sha-signature-check.dat' ) )
-{
+// retrieve the sha!
+if (!copy( 'https://composer.github.io/installer.sig', dirname( __FILE__ ) . '/sha-signature-check.dat' )){
     exit( "\r\n$pid: Could not write the SHA locally to verify\r\n" );
 }
-
-//sleep for 1 second!
+// sleep for 1 second!
 echo "\r\n$pid: Sleeping for little bit\r\n";
 flush();
 sleep(1); /* flushed the content here */
@@ -146,7 +119,6 @@ if( !file_exists( dirname( __FILE__ ) . '/sha-signature-check.dat' ) )
 
 $sha = file( dirname( __FILE__ ) . '/sha-signature-check.dat', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
 $sha_composer = hash_file( 'SHA384', dirname( __FILE__ ) . '/composer-setup-' . $fuid . '.php' );
-
 echo "\r\n$pid: SHA: $sha[0]\r\n";
 echo "\r\n$pid: FILE SHA: $sha_composer\r\n";
 echo "\r\n$pid: Makesure to run this file again with the command --clean\r\n";
@@ -170,7 +142,8 @@ $JSON_DEPENDENCY = <<<_JSDEPEND_
 }
 _JSDEPEND_;
  */
-//Kepp non dependencies for now to start with
+
+// Keep non dependencies for now to start with
 $JSON_DEPENDENCY = <<<_JSDEPEND_
 {
     "": {
@@ -179,26 +152,28 @@ $JSON_DEPENDENCY = <<<_JSDEPEND_
 }
 _JSDEPEND_;
 
-if( !file_exists( dirname( __FILE__ ) . '/composer.json' ) )
-{
+if (!file_exists( dirname( __FILE__ ) . '/composer.json' )) {
 	file_put_contents( dirname( __FILE__ ) . '/composer.json', $JSON_DEPENDENCY );
 	echo "\r\n$pid: composer.json file created\r\n";
 	flush();
 }
 
-//run it...
-//include dirname( __FILE__ ) . '/composer-setup-' . $fuid . '.php';
+// run it...
+// include dirname( __FILE__ ) . '/composer-setup-' . $fuid . '.php';
 $cmd = 'php composer-setup-' . $fuid . '.php';
 $composer_installed = shell_exec($cmd);
-
 unlink( dirname( __FILE__ ) . '/composer-setup-' . $fuid . '.php' );
 unlink( dirname( __FILE__ ) . '/sha-signature-check.dat' );
-
 echo "\r\n$pid: Composer now Installed\r\n";
 
-if( $install_laravel == true )
-{
-    //okay we need to install laravel now
+/**
+* TODO: 
+*  - Allow the consumer to specify a version of laravel to install
+*  - Provide fallback where version not installable due to current PHP version, mods, etc.
+*/
+
+if ($install_laravel == true){
+    // let's attempt to install Laravel now.
     echo "\r\nInstalling Laravel\r\n";
     flush();
     $path = dirname(__FILE__) . '/';
@@ -208,7 +183,4 @@ if( $install_laravel == true )
     $cmd = 'php ' . $path  . 'vendor/laravel/installer/laravel new ' . $create_laravel_dir;
     $return = shell_exec($cmd);
 }
-
 exit( "\r\n$pid: Done\r\n" );
-
-?>
